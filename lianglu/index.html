@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>“两路”精神数字展厅 | 重庆交通大学</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ========== 顶部导航 ========== -->
+<nav id="navbar">
+  <button class="nav-btn active" data-panel="overview">精神总览</button>
+  <button class="nav-btn" data-panel="landmarks">地标巡礼</button>
+  <button class="nav-btn" data-panel="motto">校训解读</button>
+  <button class="nav-btn" data-panel="interact">互动留念</button>
+</nav>
+
+<!-- ========== 板块1：精神总览 ========== -->
+<section id="overview" class="panel active">
+  <div class="overview-hero">
+    <h1>“两路”精神数字展厅</h1>
+    <p class="subtitle">重庆交通大学 · 育人园地标巡礼</p>
+    <div class="keywords">
+      <span>一不怕苦</span>
+      <span>二不怕死</span>
+      <span>顽强拼搏</span>
+      <span>甘当路石</span>
+      <span>军民一家</span>
+      <span>民族团结</span>
+    </div>
+    <div class="overview-text">
+      <p>1954年，川藏、青藏公路通车。3000多名英烈长眠高原，用生命和汗水在世界屋脊上凿出两条“天路”。</p>
+      <p>重庆交通大学因川藏公路而生。1951年，为培养筑路人才，学校前身西南交通专科学校创立。70余年来，“两路”精神始终是交大人的精神底色。</p>
+    </div>
+    <button class="start-btn" onclick="switchTo('landmarks')">开始探索 →</button>
+    <p class="nfc-tip">📱 手机碰一碰，走进“两路”精神数字展厅</p>
+  </div>
+</section>
+
+<!-- ========== 板块2：地标巡礼 ========== -->
+<section id="landmarks" class="panel">
+  <h2 class="panel-title">地标巡礼</h2>
+  <p class="panel-desc">点击卡片，走进每一个地标背后的故事</p>
+  <div id="landmark-grid" class="landmark-grid"></div>
+  <div class="progress-bar">
+    <span id="progress-text">已点亮 0 / 5</span>
+    <div class="badge-area" id="badge-area"></div>
+  </div>
+</section>
+
+<!-- ========== 板块3：校训解读 ========== -->
+<section id="motto" class="panel">
+  <h2 class="panel-title">校训解读</h2>
+  <p class="panel-desc">明德行远 · 交通天下</p>
+  <div id="motto-list"></div>
+  <p class="motto-conclusion">校训精神，是“两路”精神在办学育人中的延续。</p>
+</section>
+
+<!-- ========== 板块4：互动留念 ========== -->
+<section id="interact" class="panel">
+  <h2 class="panel-title">互动留念</h2>
+
+  <!-- 电子明信片 -->
+  <div class="interact-card">
+    <h3>📮 电子明信片</h3>
+    <p>选一个地标，写下你的话，生成专属明信片</p>
+    <select id="postcard-select"></select>
+    <textarea id="postcard-text" placeholder="写下你想说的话……" maxlength="60"></textarea>
+    <button class="primary-btn" onclick="generatePostcard()">生成明信片</button>
+    <div id="postcard-result" class="postcard-result"></div>
+  </div>
+
+  <!-- 语音留言 -->
+  <div class="interact-card">
+    <h3>🎤 语音留言</h3>
+    <p>录一段话，留下你的声音（本地播放，不上传）</p>
+    <button class="primary-btn" id="record-btn" onclick="toggleRecord()">开始录音</button>
+    <div id="record-status" class="record-status"></div>
+    <audio id="record-playback" controls style="display:none;width:100%;margin-top:10px;"></audio>
+  </div>
+
+  <!-- 打卡计数 -->
+  <div class="interact-card">
+    <h3>👣 打卡留念</h3>
+    <p id="visit-count">你是第 — 位访问者</p>
+  </div>
+
+  <!-- 延伸链接 -->
+  <div class="interact-card">
+    <h3>🔗 延伸链接</h3>
+    <a class="link-btn" href="https://www.cqjtu.edu.cn" target="_blank">重庆交通大学官网 →</a>
+    <a class="link-btn" href="#" target="_blank">“两路”精神专题网站 →</a>
+    <a class="link-btn" href="#" target="_blank">育人园VR导览 →</a>
+  </div>
+</section>
+
+<!-- ========== 地标详情弹层 ========== -->
+<div id="detail-modal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('detail-modal')">×</button>
+    <img id="detail-img" class="detail-img" src="" alt="">
+    <h3 id="detail-title"></h3>
+    <div id="detail-story" class="detail-story"></div>
+    <audio id="detail-audio" controls preload="none" style="width:100%;margin-top:12px;display:none;"></audio>
+    <a id="detail-video" class="link-btn" href="#" target="_blank" style="display:none;">观看完整影像 →</a>
+    <button id="light-btn" class="primary-btn" onclick="lightLandmark()">点亮此地标</button>
+  </div>
+</div>
+
+<!-- ========== 电子明信片弹层 ========== -->
+<div id="postcard-modal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('postcard-modal')">×</button>
+    <h3>你的专属明信片</h3>
+    <canvas id="postcard-canvas" style="width:100%;border-radius:8px;"></canvas>
+    <p class="tip">长按图片可保存到手机</p>
+  </div>
+</div>
+
+<!-- ========== 徽章弹层 ========== -->
+<div id="badge-modal" class="modal">
+  <div class="badge-modal-content">
+    <div class="badge-big">🏅</div>
+    <h2>甘当路石</h2>
+    <p>你已点亮全部5个地标</p>
+    <p class="badge-sub">“两路”精神 · 电子徽章</p>
+    <button class="primary-btn" onclick="closeModal('badge-modal')">收下徽章</button>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
